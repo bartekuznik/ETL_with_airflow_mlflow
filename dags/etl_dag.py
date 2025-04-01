@@ -8,6 +8,20 @@ from sklearn.preprocessing import OneHotEncoder
 import pandas as pd
 from sklearn.linear_model import Ridge
 
+doc_md_DAG = """
+### ETL DAG for Sensor Data
+
+    This DAG automates the ETL process for sensor data, followed by machine learning model training and evaluation.
+
+    **Workflow:**
+    1. **Extract** - Retrieves sensor data from a PostgreSQL database.
+    2. **Preprocessing** - Cleans missing values, removes the timestamp column, and encodes categorical variables.
+    3. **Model Training & Evaluation** - Trains Ridge regression models with different alpha values and logs results in MLflow.
+    4. **Best Model Selection** - Identifies the best-performing model by selecting the one with the lowest Mean Absolute Error (MAE).
+
+    **Schedule:** Runs daily (`@daily`).
+"""
+
 default_args ={
     'owner': 'admin',
     'retries': 1,
@@ -17,7 +31,8 @@ default_args ={
 @dag(dag_id='etl_dag',
     default_args=default_args,
     start_date=datetime(2025, 3, 22),
-    schedule_interval='@daily')
+    schedule_interval='@daily',
+    doc_md = doc_md_DAG)
 def etl():
     
     @task()

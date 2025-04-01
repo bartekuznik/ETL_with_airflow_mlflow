@@ -2,10 +2,23 @@ import random
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 
+"""
+Script for generating and sending air quality sensor data: 
+
+- Generates random sensor data for five predefined sensors.
+- Introduces occasional missing values (`None`) with a small probability.
+- The script runs every minute.
+"""
 
 def generate_air_quality_data():
+
+    """Generates and sends air quality sensor data to the API."""
+
     print("Generating air quality data...")
     def maybe_none(value, chance=0.02):
+
+        """Randomly returns None with a given probability, simulating missing values."""
+
         value = random.random()
         if value > chance:
             return value

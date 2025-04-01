@@ -1,4 +1,3 @@
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import AirQualitySensorData
@@ -9,12 +8,32 @@ from rest_framework.decorators import api_view
 
 @api_view(['GET'])
 def get_all_data(request):
+    """
+    This endpoint returns a list of all stored sensor data records 
+    from the AirQualitySensorData model.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        Response: A JSON response containing a list of all sensor data.
+    """
     sensors_data = AirQualitySensorData.objects.all()
     serialized_sensors_data = AirQualitySensorDataSerializer(sensors_data, many=True).data
     return Response(serialized_sensors_data)
     
 @api_view(['GET'])
 def get_lastets(request):
+    """
+    This endpoint fetches the most recent entry for each sensor 
+    in the predefined list
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        Response: A JSON response containing the latest data for each sensor
+    """
     sensor_ids = ['sensor_1', 'sensor_2', 'sensor_3', 'sensor_4', 'sensor_5']
     
     latest_data = []
@@ -29,6 +48,17 @@ def get_lastets(request):
 
 @api_view(['POST'])   
 def post_data(request):
+    """
+    This endpoint accepts JSON data for a new sensor reading
+    and saves it to the database if valid.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        Response: A success message if data is saved, 
+        or validation errors if the request is invalid.
+    """
     serializer = AirQualitySensorDataSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
